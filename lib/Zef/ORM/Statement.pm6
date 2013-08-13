@@ -1,5 +1,7 @@
 #!/usr/bin/env perl6
 
+use Zef::ORM::Model::Obj;
+
 class Zef::ORM::Statement {
   has Bool $.built = False;
   has Str  $.table;
@@ -26,7 +28,13 @@ class Zef::ORM::Statement {
   }
 
   method next {
-    return $!statement.fetchrow_hashref;
+    my $hash = $!statement.fetchrow_hashref;
+    return $hash if !$hash;
+    my $obj  = Zef::ORM::Model::Obj.new( id => $hash<ID> );
+    for $hash.keys -> $k {
+      $obj.assign($k, $hash{$k});
+    }
+    return $obj;
   }
   
 }

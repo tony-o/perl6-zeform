@@ -21,7 +21,7 @@ my $result = $tbl.find('WHERE ID = ? OR ID = ? ');
 $result.exec( [$type1.id, $type2.id] );
 my $data;
 while ( $data = $result.next ) {
-  say "{$data<ID>}\t{$data<intfield>}";
+  say "{$data.get(<ID>)}\t{$data.get(<intfield>)}";
 }
 $result.finish;
 
